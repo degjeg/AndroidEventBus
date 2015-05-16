@@ -111,7 +111,7 @@ public class ConstactFragment extends Fragment {
 
     /**
      * 含有tag标识的函数
-     * 
+     *
      * @param person
      */
     @Subscriber(tag = MenuFragment.REMOVE_TAG)
@@ -122,7 +122,7 @@ public class ConstactFragment extends Fragment {
 
     /**
      * 执行在异步线程的函数
-     * 
+     *
      * @param event
      */
     @Subscriber(tag = MenuFragment.ASYNC_TAG, mode = ThreadMode.ASYNC)
@@ -134,7 +134,7 @@ public class ConstactFragment extends Fragment {
                 @Override
                 public void run() {
                     Toast.makeText(getActivity(),
-                            R.string.execute_async + threadName + ", User Info  : " + person,
+                            "在线程：" + threadName + "中执行, User Info  : " + person,
                             Toast.LENGTH_LONG)
                             .show();
                 }

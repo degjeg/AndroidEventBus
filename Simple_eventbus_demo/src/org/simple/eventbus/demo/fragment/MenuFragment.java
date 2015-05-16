@@ -152,7 +152,7 @@ public class MenuFragment extends BaseFragment {
             }
         });
 
-        startThreads();
+//        startThreads();
 
         EventBus.getDefault().register(this);
         return rootView;

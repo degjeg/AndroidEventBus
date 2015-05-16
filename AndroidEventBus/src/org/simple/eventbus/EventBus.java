@@ -57,6 +57,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class EventBus {
 
+    public static final boolean LOG_ON = true;
     /**
      * default descriptor
      */
@@ -90,7 +91,7 @@ public final class EventBus {
      * the subscriber method hunter, find all of the subscriber's methods
      * annotated with @Subcriber
      */
-    SubsciberMethodHunter mMethodHunter = new SubsciberMethodHunter(mSubcriberMap);
+    SubscriberMethodHunter mMethodHunter = new SubscriberMethodHunter(mSubcriberMap);
 
     /**
      * The Default EventBus instance
@@ -128,7 +129,7 @@ public final class EventBus {
     }
 
     /**
-     * register a subscriber into the mSubcriberMap, the key is subscriber's
+     * register a subscriber into the mSubscriberMap, the key is subscriber's
      * method's name and tag which annotated with {@see Subcriber}, the value is
      * a list of Subscription.
      * 
@@ -140,7 +141,7 @@ public final class EventBus {
         }
 
         synchronized (this) {
-            mMethodHunter.findSubcribeMethods(subscriber);
+            mMethodHunter.findSubscribeMethods(subscriber);
         }
     }
 
@@ -299,7 +300,7 @@ public final class EventBus {
             Class<?> eventClass = aEvent.getClass();
             List<EventType> eventTypes = null;
             // 如果有缓存则直接从缓存中取
-            if (mCacheEventTypes.containsKey(eventClass)) {
+            if (mCacheEventTypes.containsKey(type)) {
                 eventTypes = mCacheEventTypes.get(type);
             } else {
                 eventTypes = mMatchPolicy.findMatchEventTypes(type, aEvent);

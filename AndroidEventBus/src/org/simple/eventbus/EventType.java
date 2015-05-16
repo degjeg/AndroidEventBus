@@ -16,19 +16,17 @@
 
 package org.simple.eventbus;
 
+import android.text.TextUtils;
+
 /**
- * <p>
+ * <p/>
  * 该类是描述一个函数唯一性的对象，参数类型、tag两个条件保证了对象的唯一性.通过该类的对象来查找注册了相应类型和tag的所有订阅者{@see
  * Subscription}, 并且在接到消息时调用所有订阅者对应的函数.
- * 
+ *
  * @author mrsimple
  */
 public final class EventType {
-    /**
-     * 默认的tag
-     */
-    public static final String DEFAULT_TAG = "default_tag";
-
+    public static final String DEFAULT_TAG = "def";
     /**
      * 参数类型
      */
@@ -78,12 +76,9 @@ public final class EventType {
                 return false;
         } else if (!paramClass.equals(other.paramClass))
             return false;
-        if (tag == null) {
-            if (other.tag != null)
-                return false;
-        } else if (!tag.equals(other.tag))
-            return false;
-        return true;
+        boolean nameEquals = TextUtils.equals(tag, other.tag);
+
+        return nameEquals;
     }
 
 }

@@ -16,18 +16,19 @@
 
 package org.simple.eventbus;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 
 /**
  * 订阅者对象,包含订阅者和目标方法
- * 
+ *
  * @author mrsimple
  */
 public class Subscription {
     /**
      * 订阅者对象
      */
-    public Object subscriber;
+    private WeakReference<Object> subscriber;
     /**
      * 接受者的方法
      */
@@ -42,7 +43,7 @@ public class Subscription {
      * @param method
      */
     public Subscription(Object subscriber, TargetMethod targetMethod) {
-        this.subscriber = subscriber;
+        this.subscriber = new WeakReference<Object>(subscriber);
         this.targetMethod = targetMethod.method;
         this.threadMode = targetMethod.threadMode;
     }
@@ -51,7 +52,7 @@ public class Subscription {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((subscriber == null) ? 0 : subscriber.hashCode());
+        result = prime * result + ((subscriber != null && subscriber.get() == null) ? 0 : subscriber.get().hashCode());
         result = prime * result + ((targetMethod == null) ? 0 : targetMethod.hashCode());
         return result;
     }
@@ -62,20 +63,27 @@ public class Subscription {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+
+        if (!(obj instanceof Subscription))
             return false;
+
         Subscription other = (Subscription) obj;
-        if (subscriber == null) {
-            if (other.subscriber != null)
-                return false;
-        } else if (!subscriber.equals(other.subscriber))
+
+        if (getSubscriber() == null && other.getSubscriber() == null)//等于null不需要执行任何操作
+            return true;
+
+        if (getSubscriber() != other.getSubscriber()) {
             return false;
-        if (targetMethod == null) {
-            if (other.targetMethod != null)
-                return false;
-        } else if (!targetMethod.equals(other.targetMethod))
+        }
+
+        if (targetMethod != other.targetMethod) {
             return false;
+        }
+
         return true;
     }
 
+    public java.lang.Object getSubscriber() {
+        return (subscriber != null && subscriber.get() != null) ? subscriber.get() : null;
+    }
 }
