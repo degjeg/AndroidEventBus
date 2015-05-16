@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidEventBus/AndroidEventBus.iml" filepath="$PROJECT_DIR$/AndroidEventBus/AndroidEventBus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidEventBus_degjeg.iml" filepath="$PROJECT_DIR$/AndroidEventBus_degjeg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Simple_Event_Test/Simple_Event_Test.iml" filepath="$PROJECT_DIR$/Simple_Event_Test/Simple_Event_Test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Simple_eventbus_demo/Simple_eventbus_demo.iml" filepath="$PROJECT_DIR$/Simple_eventbus_demo/Simple_eventbus_demo.iml" />
+    </modules>
+  </component>
+</project>
