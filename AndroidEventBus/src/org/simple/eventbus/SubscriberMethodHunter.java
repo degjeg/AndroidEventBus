@@ -95,8 +95,7 @@ public class SubscriberMethodHunter {
                         }
 
                         EventType eventType = new EventType(paramsTypeClass, annotation.tag());
-                        TargetMethod subscribeMethod = new TargetMethod(method, paramsTypeClass, annotation.mode());
-                        subscribeMethod.eventType = eventType;
+                        TargetMethod subscribeMethod = new TargetMethod(method, eventType, annotation.mode());
                         subscriberMethods.add(subscribeMethod);
 
                     }

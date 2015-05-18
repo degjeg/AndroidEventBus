@@ -35,20 +35,20 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * <p>
+ * <p/>
  * 该类是演示AndroidEventBus使用的菜单Fragment,演示不了不同参数类型、不同线程模型的事件发布、接收示例.
  * 一个事件类型的决定因素只有事件的参数类型( Class ) 和 注册时的tag ( 字符串 ) ,线程模型( mode
  * )不会影响事件类型的定位,只会影响订阅函数执行在哪个线程中.
- * <p>
+ * <p/>
  * 不同组件 (Activity、Fragment、Service等)、不同线程之间都可以通过事件总线来发布事件,它是线程安全的。
  * 只要发布的事件的参数类型和tag都匹配即可接收到事件.
- * <p>
+ * <p/>
  * 注意 : 如果发布的事件的参数类型是订阅的事件参数的子类,订阅函数默认也会被执行。例如你在订阅函数中订阅的是List<String>类型的事件,
  * 但是在发布时发布的是ArrayList<String>的事件,
  * 因此List<String>是一个泛型抽象,而ArrayList<String>才是具体的实现
  * ,因此这种情况下订阅函数也会被执行。如果你需要订阅函数能够接收到的事件类型必须严格匹配 , 然后通过事件总线{@see
  * EventBus#setMatchPolicy(org.simple.eventbus.matchpolicy.MatchPolicy)}设置匹配策略.
- * 
+ *
  * @author mrsimple
  */
 public class MenuFragment extends BaseFragment {
@@ -59,7 +59,7 @@ public class MenuFragment extends BaseFragment {
     public static final String REMOVE_TAG = "remove";
 
     /**
-     * 
+     *
      */
     PostThread[] threads = new PostThread[4];
     /**
@@ -73,7 +73,7 @@ public class MenuFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.menu_fragment, container, false);
 
         mUserNameTv = (TextView) rootView.findViewById(R.id.click_tv);
@@ -108,7 +108,7 @@ public class MenuFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         // 将目标函数执行在异步线程中
-                        EventBus.getDefault().post(null, new User("async-user"), ASYNC_TAG);
+                        EventBus.getDefault().post(ASYNC_TAG, new User("async-user") );
                     }
                 });
 
@@ -136,7 +136,7 @@ public class MenuFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 // post 给PostThread线程
-                EventBus.getDefault().post(THREAD_TAG, "I am MainThread" );
+                EventBus.getDefault().post(THREAD_TAG, "I am MainThread");
             }
         });
 
@@ -181,7 +181,8 @@ public class MenuFragment extends BaseFragment {
                 // post 给PostThread线程
                 EventBus.getDefault().post(null, null, new User("Mr.Simple" + new Random().nextInt(100)), 11111);
             }
-        }); rootView.findViewById(R.id.add_three1).setOnClickListener(new OnClickListener() {
+        });
+        rootView.findViewById(R.id.add_three1).setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -231,7 +232,7 @@ public class MenuFragment extends BaseFragment {
 
     /**
      * 订阅点击事件,该事件是从{@see ConstactFragment}中的ListView点击某个项时发布的
-     * 
+     *
      * @param clickPerson
      */
     @Subscriber(tag = CLICK_TAG)
@@ -250,7 +251,7 @@ public class MenuFragment extends BaseFragment {
 
     /**
      * 接受参数类型为String的事件,执行在发布事件的线程. {@link PostThread#run()}
-     * 
+     *
      * @param event
      */
     @Subscriber(mode = ThreadMode.POST)
@@ -263,7 +264,7 @@ public class MenuFragment extends BaseFragment {
      * 发布一个消息,接收函数在BaseFragment中
      */
     private void postEventToSuper() {
-        EventBus.getDefault().post(SUPER_TAG, new User("super") );
+        EventBus.getDefault().post(SUPER_TAG, new User("super"));
     }
 
     @Override
@@ -278,7 +279,7 @@ public class MenuFragment extends BaseFragment {
 
     /**
      * 投递线程,不断地给主线程投递消息,同时也接受主线程投递过来的消息
-     * 
+     *
      * @author mrsimple
      */
     class PostThread extends Thread {
@@ -294,7 +295,7 @@ public class MenuFragment extends BaseFragment {
 
         /**
          * receiver msg from other thread
-         * 
+         *
          * @param name
          */
         @Subscriber(tag = THREAD_TAG)
@@ -304,7 +305,8 @@ public class MenuFragment extends BaseFragment {
 
         @Override
         public void run() {
-            while (!this.isInterrupted()) {
+            int count = 10;
+            while (!this.isInterrupted() && count-- > 0) {
                 // 从子线程发布消息
                 EventBus.getDefault().post(null, getName());
 

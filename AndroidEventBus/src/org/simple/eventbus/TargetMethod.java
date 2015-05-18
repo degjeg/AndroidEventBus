@@ -29,10 +29,6 @@ class TargetMethod {
      */
     public Method method;
     /**
-     * 事件类型
-     */
-    public Class<?> parameterType[];
-    /**
      * 处理事件的线程模式
      */
     public ThreadMode threadMode;
@@ -44,10 +40,10 @@ class TargetMethod {
      * @param eventType
      * @param mode
      */
-    public TargetMethod(Method md, Class<?> clazz[], ThreadMode mode) {
+    public TargetMethod(Method md, EventType eventType, ThreadMode mode) {
         this.method = md;
         this.method.setAccessible(true);
-        this.parameterType = clazz;
+        this.eventType = eventType;
         this.threadMode = mode;
     }
 
@@ -55,7 +51,7 @@ class TargetMethod {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((parameterType == null) ? 0 : parameterType.hashCode());
+        result = prime * result + ((eventType == null) ? 0 : eventType.hashCode());
         result = prime * result + ((method == null) ? 0 : method.getName().hashCode());
         return result;
     }
