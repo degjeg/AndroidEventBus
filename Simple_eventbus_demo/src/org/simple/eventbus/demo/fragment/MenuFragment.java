@@ -84,7 +84,9 @@ public class MenuFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(null, new User("Mr.Simple" + new Random().nextInt(100)));
+//                EventBus.getDefault().post(null, new User("Mr.Simple" + new Random().nextInt(100)));
+                EventBus.getDefault().post(null);
+
             }
         });
 
@@ -95,7 +97,7 @@ public class MenuFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         // 移除用户
-                        EventBus.getDefault().post(null, new User("User - 1"));
+                        EventBus.getDefault().post(REMOVE_TAG, new User("User - 1"));
                     }
                 });
 
@@ -134,7 +136,7 @@ public class MenuFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 // post 给PostThread线程
-                EventBus.getDefault().post("I am MainThread", THREAD_TAG);
+                EventBus.getDefault().post(THREAD_TAG, "I am MainThread" );
             }
         });
 
@@ -152,6 +154,43 @@ public class MenuFragment extends BaseFragment {
             }
         });
 
+
+        // 发布事件,将事件投递到子线程中
+        rootView.findViewById(R.id.add_two).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // post 给PostThread线程
+                EventBus.getDefault().post(null, new User("Mr.Simple" + new Random().nextInt(100)), new User("Mr.Simple" + new Random().nextInt(100)));
+            }
+        });
+
+        // 发布事件,将事件投递到子线程中
+        rootView.findViewById(R.id.add_two1).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // post 给PostThread线程
+                EventBus.getDefault().post(null, null, new User("Mr.Simple" + new Random().nextInt(100)));
+            }
+        });  // 发布事件,将事件投递到子线程中
+        rootView.findViewById(R.id.add_three).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // post 给PostThread线程
+                EventBus.getDefault().post(null, null, new User("Mr.Simple" + new Random().nextInt(100)), 11111);
+            }
+        }); rootView.findViewById(R.id.add_three1).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // post 给PostThread线程
+                EventBus.getDefault().post(null, null, null, new User("Mr.Simple" + new Random().nextInt(100)));
+            }
+        });
+
+
 //        startThreads();
 
         EventBus.getDefault().register(this);
@@ -164,6 +203,7 @@ public class MenuFragment extends BaseFragment {
 
     @Subscriber
     private void startThreads() {
+        Log.d("onEvent", "startThreads");
         for (int i = 0; i < 4; i++) {
             threads[i] = new PostThread(i);
             threads[i].start();

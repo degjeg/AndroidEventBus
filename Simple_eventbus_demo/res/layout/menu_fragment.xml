@@ -46,6 +46,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/post_primitive" />
+    <Button
+        android:id="@+id/add_two"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加2个"/>
+
+    <Button
+        android:id="@+id/add_two1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加2个_1"/>
+
+    <Button
+        android:id="@+id/add_three"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加3个"/>
+
+    <Button
+        android:id="@+id/add_three1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加2个_1"/>
 
     <TextView
         android:id="@+id/click_tv"
@@ -59,5 +82,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp" />
+
+
+
 
 </LinearLayout>

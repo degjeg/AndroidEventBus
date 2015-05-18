@@ -42,7 +42,7 @@ public class DefaultEventHandler implements EventHandler {
         try {
             Object event[] = (Object[]) event1;
             // 执行
-            if (event == null) {
+            if (event == null || event.length == 0) {
                 subscription.targetMethod.invoke(subscription.getSubscriber());
             } else if (event.length == 1) {
                 subscription.targetMethod.invoke(subscription.getSubscriber(), event[0]);

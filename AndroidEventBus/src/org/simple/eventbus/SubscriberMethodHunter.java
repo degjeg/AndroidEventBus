@@ -89,6 +89,10 @@ public class SubscriberMethodHunter {
                         // 获取方法参数
                         Class<?>[] paramsTypeClass = method.getParameterTypes();
                         // just only one param
+                        int len = paramsTypeClass==null?0:paramsTypeClass.length;
+                        for (int midx = 0; midx < len; midx++) {
+                            paramsTypeClass[midx] = convertType(paramsTypeClass[midx]);
+                        }
 
                         EventType eventType = new EventType(paramsTypeClass, annotation.tag());
                         TargetMethod subscribeMethod = new TargetMethod(method, paramsTypeClass, annotation.mode());

@@ -18,6 +18,7 @@ package org.simple.eventbus.demo.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,7 @@ public class ConstactFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 点击用户,发布消息,
                 // tag为MenuFragment.CLICK_TAG,接收函数在MenuFragment的updateClickUserName中
-                EventBus.getDefault().post(MenuFragment.CLICK_TAG, mConstacts.get(position) );
+                EventBus.getDefault().post(MenuFragment.CLICK_TAG, mConstacts.get(position));
             }
         });
     }
@@ -118,6 +119,18 @@ public class ConstactFragment extends Fragment {
     private void removePersonPrivate(User person) {
         mConstacts.remove(person);
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Subscriber()
+    private void onEvent2(User person1, User person2) {
+        Log.d("onEvent", "onEvent2_1"+person1);
+        Log.d("onEvent", "onEvent2_2"+person2);
+    }
+    @Subscriber()
+    private void onEvent3(User person1, User person2, int a) {
+        Log.d("onEvent", "onEvent3_1"+person1);
+        Log.d("onEvent", "onEvent3_2"+person2);
+        Log.d("onEvent", "onEvent3_3"+a);
     }
 
     /**
