@@ -161,6 +161,8 @@ public class MenuFragment extends BaseFragment {
     /**
      * start post threads
      */
+
+    @Subscriber
     private void startThreads() {
         for (int i = 0; i < 4; i++) {
             threads[i] = new PostThread(i);

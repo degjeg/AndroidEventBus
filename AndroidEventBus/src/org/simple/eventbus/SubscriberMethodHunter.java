@@ -149,7 +149,7 @@ public class SubscriberMethodHunter {
                 while (subIterator.hasNext()) {
                     Subscription subscription = subIterator.next();
                     if (subscription.getSubscriber() == null ||
-                            subscription.getSubscriber().equals(subscriber)) {
+                            (subscriber != null && subscription.getSubscriber().equals(subscriber))) {
 
                         if (EventBus.LOG_ON && subscriber != null) {
                             Log.d("", "### 移除订阅 " + subscriber.getClass().getName());

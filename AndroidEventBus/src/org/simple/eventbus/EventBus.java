@@ -31,28 +31,28 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * <p>
+ * <p/>
  * EventBus是AndroidEventBus框架的核心类,也是用户的入口类.它存储了用户注册的订阅者信息和方法,
  * 事件类型和该事件对应的tag标识一个种类的事件{@see EventType},每一种事件对应有一个或者多个订阅者{@see Subscription}
  * ,订阅者中的订阅函数通过{@see Subcriber}注解来标识tag和线程模型,这样使得用户体检较为友好,代码也更加整洁.
- * <p>
+ * <p/>
  * 用户需要在发布事件前通过@{@see #register(Object)}方法将订阅者注册到EventBus中,EventBus会解析该订阅者中使用了
  * {@see Subcriber}标识的函数,并且将它们以{@see EventType}为key,以{@see Subscription}
  * 列表为value存储在map中. 当用户post一个事件时通过事件到map中找到对应的订阅者,然后按照订阅函数的线程模型将函数执行在对应的线程中.
- * <p>
+ * <p/>
  * 最后在不在需要订阅事件时,应该调用{@see #unregister(Object)}函数注销该对象,避免内存泄露!
  * 例如在Activity或者Fragment的onDestory函数中注销对Activity或者Fragment的订阅.
- * <p>
+ * <p/>
  * 注意 : 如果发布的事件的参数类型是订阅的事件参数的子类,订阅函数默认也会被执行。例如你在订阅函数中订阅的是List<String>类型的事件,
  * 但是在发布时发布的是ArrayList<String>的事件,
  * 因此List<String>是一个泛型抽象,而ArrayList<String>才是具体的实现
  * ,因此这种情况下订阅函数也会被执行。如果你需要订阅函数能够接收到的事件类型必须严格匹配 ,你可以构造一个EventBusConfig对象,
  * 然后设置MatchPolicy然后在使用事件总线之前使用该EventBusConfig来初始化事件总线. <code>
- *      EventBusConfig config = new EventBusConfig();
-        config.setMatchPolicy(new StrictMatchPolicy());
-        EventBus.getDefault().initWithConfig(config);
+ * EventBusConfig config = new EventBusConfig();
+ * config.setMatchPolicy(new StrictMatchPolicy());
+ * EventBus.getDefault().initWithConfig(config);
  * </code>
- * 
+ *
  * @author mrsimple
  */
 public final class EventBus {
@@ -79,7 +79,9 @@ public final class EventBus {
     ThreadLocal<Queue<EventType>> mLocalEvents = new ThreadLocal<Queue<EventType>>() {
         protected java.util.Queue<EventType> initialValue() {
             return new ConcurrentLinkedQueue<EventType>();
-        };
+        }
+
+        ;
     };
 
     /**
@@ -107,7 +109,7 @@ public final class EventBus {
 
     /**
      * constructor with desc
-     * 
+     *
      * @param desc the descriptor of eventbus
      */
     public EventBus(String desc) {
@@ -132,10 +134,11 @@ public final class EventBus {
      * register a subscriber into the mSubscriberMap, the key is subscriber's
      * method's name and tag which annotated with {@see Subcriber}, the value is
      * a list of Subscription.
-     * 
+     *
      * @param subscriber the target subscriber
      */
     public void register(Object subscriber) {
+//        unregister(null);
         if (subscriber == null) {
             return;
         }
@@ -149,10 +152,6 @@ public final class EventBus {
      * @param subscriber
      */
     public void unregister(Object subscriber) {
-        if (subscriber == null) {
-            return;
-        }
-
         synchronized (this) {
             mMethodHunter.removeMethodsFromMap(subscriber);
         }
@@ -160,7 +159,7 @@ public final class EventBus {
 
     /**
      * post a event
-     * 
+     *
      * @param event
      */
     public void post(Object event) {
@@ -169,9 +168,9 @@ public final class EventBus {
 
     /**
      * post event with tag
-     * 
+     *
      * @param event 要发布的事件
-     * @param tag 事件的tag, 类似于BroadcastReceiver的action
+     * @param tag   事件的tag, 类似于BroadcastReceiver的action
      */
     public void post(Object event, String tag) {
         mLocalEvents.get().offer(new EventType(event.getClass(), tag));
@@ -180,7 +179,7 @@ public final class EventBus {
 
     /**
      * 设置订阅函数匹配策略
-     * 
+     *
      * @param policy 匹配策略
      */
     public void setMatchPolicy(MatchPolicy policy) {
@@ -189,7 +188,7 @@ public final class EventBus {
 
     /**
      * 设置执行在UI线程的事件处理器
-     * 
+     *
      * @param handler
      */
     public void setUIThreadEventHandler(EventHandler handler) {
@@ -198,7 +197,7 @@ public final class EventBus {
 
     /**
      * 设置执行在post线程的事件处理器
-     * 
+     *
      * @param handler
      */
     public void setPostThreadHandler(EventHandler handler) {
@@ -207,7 +206,7 @@ public final class EventBus {
 
     /**
      * 设置执行在异步线程的事件处理器
-     * 
+     *
      * @param handler
      */
     public void setAsyncEventHandler(EventHandler handler) {
@@ -216,7 +215,7 @@ public final class EventBus {
 
     /**
      * 返回订阅map
-     * 
+     *
      * @return
      */
     public Map<EventType, CopyOnWriteArrayList<Subscription>> getSubscriberMap() {
@@ -225,7 +224,7 @@ public final class EventBus {
 
     /**
      * 获取等待处理的事件队列
-     * 
+     *
      * @return
      */
     public Queue<EventType> getEventQueue() {
@@ -242,7 +241,7 @@ public final class EventBus {
 
     /**
      * get the descriptor of EventBus
-     * 
+     *
      * @return the descriptor of EventBus
      */
     public String getDescriptor() {
@@ -251,7 +250,7 @@ public final class EventBus {
 
     /**
      * 事件分发器
-     * 
+     *
      * @author mrsimple
      */
     private class EventDispatcher {
@@ -292,7 +291,7 @@ public final class EventBus {
 
         /**
          * 根据aEvent查找到所有匹配的集合,然后处理事件
-         * 
+         *
          * @param type
          * @param aEvent
          */
@@ -314,7 +313,7 @@ public final class EventBus {
 
         /**
          * 处理单个事件
-         * 
+         *
          * @param eventType
          * @param aEvent
          */
