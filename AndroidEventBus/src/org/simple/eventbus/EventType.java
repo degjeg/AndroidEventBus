@@ -30,7 +30,8 @@ public final class EventType {
     /**
      * 参数类型
      */
-    Class<?> paramClass;
+//    Class<?> paramClass;
+    Class<?>[] paramClass;
     /**
      * 函数的tag
      */
@@ -39,18 +40,24 @@ public final class EventType {
     /**
      * @param aClass
      */
-    public EventType(Class<?> aClass) {
+    public EventType(Class<?>[] aClass) {
         this(aClass, DEFAULT_TAG);
     }
 
-    public EventType(Class<?> aClass, String aTag) {
+    public EventType(Class<?> aClass[], String aTag) {
         paramClass = aClass;
         tag = aTag;
     }
 
+
     @Override
     public String toString() {
-        return "EventType [paramClass=" + paramClass.getName() + ", tag=" + tag + "]";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < paramClass.length; i++) {
+            sb.append(paramClass[i].getName());
+            sb.append(",");
+        }
+        return "EventType tag=" + tag + ",pa:" + sb;
     }
 
     @Override
@@ -68,17 +75,58 @@ public final class EventType {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof EventType))
             return false;
         EventType other = (EventType) obj;
-        if (paramClass == null) {
-            if (other.paramClass != null)
-                return false;
-        } else if (!paramClass.equals(other.paramClass))
-            return false;
-        boolean nameEquals = TextUtils.equals(tag, other.tag);
 
-        return nameEquals;
+        if (!TextUtils.equals(tag, other.tag)) {//tag不等
+            return false;
+        }
+
+        int paLen1 = paramClass == null ? 0 : paramClass.length;
+        int paLen2 = other.paramClass == null ? 0 : other.paramClass.length;
+        if (paLen1 != paLen2) {
+            return false;
+        }
+
+        boolean equals = true;
+        for (int i = 0; i < paramClass.length; i++) {
+            if (paramClass[i] == null || other.paramClass[i] == null) {
+                continue;
+            }
+            equals = paramClass[i].equals(other.paramClass[i]);
+            if (!equals) {
+                break;
+            }
+        }
+
+        return equals;
+    }
+
+    public boolean contains(EventType other) {
+        if (other == null) {
+            return false;
+        }
+
+        if (!TextUtils.equals(tag, other.tag)) {//tag不等
+            return false;
+        }
+
+        int paLen1 = paramClass == null ? 0 : paramClass.length;
+        int paLen2 = other.paramClass == null ? 0 : other.paramClass.length;
+        if (paLen1 != paLen2) {
+            return false;
+        }
+        for (int i = 0; i < paLen1; i++) {
+            if (other.paramClass[i] == null) {
+                continue;
+            }
+
+            if (!paramClass[i].isAssignableFrom(other.paramClass[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

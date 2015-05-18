@@ -20,6 +20,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+
 import java.lang.reflect.Method;
 
 public class MainActivity extends FragmentActivity {
@@ -67,14 +70,24 @@ public class MainActivity extends FragmentActivity {
         Log.d(TAG, "test instance of Test" + Test.class.isInstance(test));
         Log.d(TAG, "test1 instance of Test" + Test.class.isInstance(test1));
 
-        Log.d(TAG, "test instance of Test1" + Test1.class.isInstance(test));
+        Log.d(TAG, "test instance of Test1" + Test.class.isInstance(test));
         Log.d(TAG, "test1 instance of Test1" + Test1.class.isInstance(test1));
+
+
+        Log.d(TAG, "Test isAssignableFrom of Test1" + Test.class.isAssignableFrom(Test1.class));
+        Log.d(TAG, "test1 isAssignableFrom of Test" + Test1.class.isAssignableFrom(Test.class));
 
         method = test.getClass().getDeclaredMethods();
         method1 = test1.getClass().getDeclaredMethods();
         dump(method);
         dump(method1);
-        Test1.class.isLocalClass()
+
+        Test2 test2 = new Test2();
+        EventBus.getDefault().register(test2);
+
+        EventBus.getDefault().post(null, test);
+        EventBus.getDefault().post(null, test1);
+
 
     }
 
@@ -107,5 +120,18 @@ public class MainActivity extends FragmentActivity {
 
         }
     }
+
+    class Test2  {
+        @Subscriber
+        void test2(Test test) {
+            Log.d(TAG, "test2.test2");
+        }
+
+        @Subscriber
+        void test3(Test1 test) {
+            Log.d(TAG, "test2.test3");
+        }
+    }
+
 
 }

@@ -76,11 +76,13 @@ public class Subscription {
             return false;
         }
 
-        if (targetMethod != other.targetMethod) {
+        if (((targetMethod == null) != (null == other.targetMethod))) {
             return false;
         }
-
-        return true;
+        if (((targetMethod == null) && (null == other.targetMethod))) {
+            return true;
+        }
+        return targetMethod.equals(other.targetMethod);
     }
 
     public java.lang.Object getSubscriber() {

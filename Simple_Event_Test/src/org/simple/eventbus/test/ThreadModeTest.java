@@ -54,7 +54,7 @@ public class ThreadModeTest extends AndroidTestCase {
     }
 
     public void testExecuteMainThread() {
-        EventBus.getDefault().post(new User("main-thread"), MAIN_TAG);
+        EventBus.getDefault().post(MAIN_TAG, new User("main-thread") );
 
         waitDispatchEvent();
     }
@@ -66,7 +66,7 @@ public class ThreadModeTest extends AndroidTestCase {
     }
 
     public void testExecutePostThread() {
-        EventBus.getDefault().post(new User("post-thread"), POST_TAG);
+        EventBus.getDefault().post(POST_TAG, new User("post-thread") );
 
         waitDispatchEvent();
     }
@@ -78,7 +78,7 @@ public class ThreadModeTest extends AndroidTestCase {
     }
 
     public void testExecuteAsyncThread() {
-        EventBus.getDefault().post(new User("async-thread"), ASYNC_TAG);
+        EventBus.getDefault().post(ASYNC_TAG, new User("async-thread") );
         waitDispatchEvent();
     }
 

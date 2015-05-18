@@ -67,7 +67,7 @@ public class ConstactFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 点击用户,发布消息,
                 // tag为MenuFragment.CLICK_TAG,接收函数在MenuFragment的updateClickUserName中
-                EventBus.getDefault().post(mConstacts.get(position), MenuFragment.CLICK_TAG);
+                EventBus.getDefault().post(MenuFragment.CLICK_TAG, mConstacts.get(position) );
             }
         });
     }

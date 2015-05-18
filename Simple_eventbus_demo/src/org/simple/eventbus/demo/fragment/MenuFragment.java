@@ -84,7 +84,7 @@ public class MenuFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new User("Mr.Simple" + new Random().nextInt(100)));
+                EventBus.getDefault().post(null, new User("Mr.Simple" + new Random().nextInt(100)));
             }
         });
 
@@ -95,7 +95,7 @@ public class MenuFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         // 移除用户
-                        EventBus.getDefault().post(new User("User - 1"), REMOVE_TAG);
+                        EventBus.getDefault().post(null, new User("User - 1"));
                     }
                 });
 
@@ -106,7 +106,7 @@ public class MenuFragment extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         // 将目标函数执行在异步线程中
-                        EventBus.getDefault().post(new User("async-user"), ASYNC_TAG);
+                        EventBus.getDefault().post(null, new User("async-user"), ASYNC_TAG);
                     }
                 });
 
@@ -143,12 +143,12 @@ public class MenuFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(12345);
+                EventBus.getDefault().post(null, 12345);
                 // 整型数组
-                EventBus.getDefault().post(new int[] {
+                /*EventBus.getDefault().post(null, new int[] {
                         12, 24
                 });
-                EventBus.getDefault().post(true);
+                EventBus.getDefault().post(null, true);*/
             }
         });
 
@@ -179,7 +179,7 @@ public class MenuFragment extends BaseFragment {
             userLisr.add(new User("user - " + i));
         }
 
-        EventBus.getDefault().post(userLisr);
+        EventBus.getDefault().post(null, userLisr);
     }
 
     @Subscriber
@@ -223,7 +223,7 @@ public class MenuFragment extends BaseFragment {
      * 发布一个消息,接收函数在BaseFragment中
      */
     private void postEventToSuper() {
-        EventBus.getDefault().post(new User("super"), SUPER_TAG);
+        EventBus.getDefault().post(SUPER_TAG, new User("super") );
     }
 
     @Override
@@ -266,7 +266,7 @@ public class MenuFragment extends BaseFragment {
         public void run() {
             while (!this.isInterrupted()) {
                 // 从子线程发布消息
-                EventBus.getDefault().post(getName());
+                EventBus.getDefault().post(null, getName());
 
                 try {
                     Thread.sleep(1000 * mIndex + 3000);

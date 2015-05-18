@@ -20,10 +20,10 @@ import java.lang.reflect.Method;
 
 /**
  * 订阅某个事件的函数类,包含了函数信息、参数名、执行的线程模式
- * 
+ *
  * @author mrsimple
  */
- class TargetMethod {
+class TargetMethod {
     /**
      * 订阅者的目标函数
      */
@@ -31,7 +31,7 @@ import java.lang.reflect.Method;
     /**
      * 事件类型
      */
-    public Class<?> parameterType;
+    public Class<?> parameterType[];
     /**
      * 处理事件的线程模式
      */
@@ -44,7 +44,7 @@ import java.lang.reflect.Method;
      * @param eventType
      * @param mode
      */
-    public TargetMethod(Method md, Class<?> clazz, ThreadMode mode) {
+    public TargetMethod(Method md, Class<?> clazz[], ThreadMode mode) {
         this.method = md;
         this.method.setAccessible(true);
         this.parameterType = clazz;
@@ -66,20 +66,19 @@ import java.lang.reflect.Method;
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof TargetMethod))
             return false;
         TargetMethod other = (TargetMethod) obj;
-        if (parameterType == null) {
-            if (other.parameterType != null)
-                return false;
-        } else if (!parameterType.equals(other.parameterType))
-            return false;
-        if (method == null) {
-            if (other.method != null)
-                return false;
-        } else if (!method.getName().equals(other.method.getName()))
-            return false;
-        return true;
+
+        if (method == null && other.method == null) {
+            return true;
+        }
+
+        if ((method == null) != (other.method == null)) {
+            return true;
+        }
+
+        return other.method.equals(method);
     }
 
 }

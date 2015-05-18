@@ -20,9 +20,8 @@ import org.simple.eventbus.handler.AsyncEventHandler;
 import org.simple.eventbus.handler.DefaultEventHandler;
 import org.simple.eventbus.handler.EventHandler;
 import org.simple.eventbus.handler.UIThreadEventHandler;
-import org.simple.eventbus.matchpolicy.DefaultMatchPolicy;
-import org.simple.eventbus.matchpolicy.MatchPolicy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -158,23 +157,29 @@ public final class EventBus {
     }
 
     /**
-     * post a event
-     *
-     * @param event
-     */
-    public void post(Object event) {
-        post(event, EventType.DEFAULT_TAG);
-    }
-
-    /**
      * post event with tag
      *
      * @param event 要发布的事件
      * @param tag   事件的tag, 类似于BroadcastReceiver的action
      */
-    public void post(Object event, String tag) {
-        mLocalEvents.get().offer(new EventType(event.getClass(), tag));
-        mDispatcher.dispatchEvents(event);
+    public void post(String tag, Object... parameter) {
+        Class<?> aClass[] = null;
+        if (tag == null) {
+            tag = EventType.DEFAULT_TAG;
+        }
+        if (parameter != null && parameter.length > 0) {
+            aClass = new Class[parameter.length];
+            for (int i = 0; i < parameter.length; i++) {
+                if (parameter[i] == null) {
+                    aClass[i] = null;
+                } else {
+                    aClass[i] = parameter[i].getClass();
+                }
+            }
+
+        }
+        mLocalEvents.get().offer(new EventType(aClass, tag));
+        mDispatcher.dispatchEvents(parameter);
     }
 
     /**
@@ -182,9 +187,9 @@ public final class EventBus {
      *
      * @param policy 匹配策略
      */
-    public void setMatchPolicy(MatchPolicy policy) {
+   /* public void setMatchPolicy(MatchPolicy policy) {
         mDispatcher.mMatchPolicy = policy;
-    }
+    }*/
 
     /**
      * 设置执行在UI线程的事件处理器
@@ -277,15 +282,15 @@ public final class EventBus {
         /**
          * 事件匹配策略,根据策略来查找对应的EventType集合
          */
-        MatchPolicy mMatchPolicy = new DefaultMatchPolicy();
+//        MatchPolicy mMatchPolicy = new DefaultMatchPolicy();
 
         /**
          * @param event
          */
-        void dispatchEvents(Object aEvent) {
+        void dispatchEvents(Object... parameter) {
             Queue<EventType> eventsQueue = mLocalEvents.get();
             while (eventsQueue.size() > 0) {
-                deliveryEvent(eventsQueue.poll(), aEvent);
+                deliveryEvent(eventsQueue.poll(), parameter);
             }
         }
 
@@ -295,15 +300,20 @@ public final class EventBus {
          * @param type
          * @param aEvent
          */
-        private void deliveryEvent(EventType type, Object aEvent) {
+        private void deliveryEvent(EventType type, Object... aEvent) {
             Class<?> eventClass = aEvent.getClass();
-            List<EventType> eventTypes = null;
-            // 如果有缓存则直接从缓存中取
+            List<EventType> eventTypes = new ArrayList<>();
+            /*// 如果有缓存则直接从缓存中取
             if (mCacheEventTypes.containsKey(type)) {
                 eventTypes = mCacheEventTypes.get(type);
             } else {
                 eventTypes = mMatchPolicy.findMatchEventTypes(type, aEvent);
                 mCacheEventTypes.put(type, eventTypes);
+            }*/
+            for (EventType e : mSubcriberMap.keySet()) {
+                if (e.contains(type)) {
+                    eventTypes.add(e);
+                }
             }
 
             for (EventType eventType : eventTypes) {
