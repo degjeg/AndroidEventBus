@@ -42,4 +42,19 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
+    buildTypes {
+        debug {
+            // debug模式
+//            signingConfig signingConfigs.debug
+        }
+
+        release {
+            // 是否进行混淆
+//            signingConfig signingConfigs.release
+            minifyEnabled true
+            // 混淆文件的位置
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+        }
+    }
 }

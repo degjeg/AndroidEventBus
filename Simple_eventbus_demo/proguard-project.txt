@@ -18,3 +18,74 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-dontwarn org.osmdroid.contributor.GpxToPHPUploader*
+-dontwarn org.codehaus.**
+-keep class vi.com.gdi.bgl.** {*;}
+-keepclassmembers class * {public <init>(org.json.JSONObject);}
+
+-keep public class pl.droidsonroids.gif.GifIOException{<init>(int);}
+-keep class pl.droidsonroids.gif.GifInfoHandle{<init>(long,int,int,int);}
+
+-keepattributes *Annotation*
+
+#share sdk
+-dontwarn cn.sharesdk.**
+-keep class cn.sharesdk.**{*;}
+-keep class m.framework.**{*;}
+-keep class cn.smssdk.**{*;}
+
+#高德地图
+-dontwarn com.amap.api.**   
+-dontwarn com.a.a.**   
+-dontwarn com.autonavi.**   
+-keep class com.amap.api.**  {*;}      
+-keep class com.autonavi.**  {*;}
+-keep class com.a.a.**  {*;}
+
+-keepattributes Signature
+-dontskipnonpubliclibraryclassmembers
+-keepattributes *Annotation*,EnclosingMethod
+
+-keepnames class org.codehaus.jackson.** {*;}
+-dontwarn javax.xml.**
+-dontwarn javax.xml.stream.events.**
+-dontwarn com.fasterxml.jackson.databind.**
+
+#保护服务器通信协议
+-keep class net.monkey8.witness.protocol.**  {*;}
+-keep class net.monkey8.witness.encrypt.**  {*;}
+-keep class net.monkey8.witness.data.db.bean.**  {*;}
+
+#数据库
+-keep class net.monkey8.witness.data.db.bean.**  {*;}
+
+
+#保护微信sdk
+#-keep class com.tencent.mm.sdk.openapi.WXMediaMessage {*;}
+#-keep class com.tencent.mm.sdk.openapi.** implements com.tencent.mm.sdk.openapi.WXMediaMessage$IMediaObject {*;}
+
+#保护QQ登录sdk
+-keep class com.tencent.mm.sdk.openapi.WXMediaMessage {*; }
+-keep class com.tencent.mm.sdk.openapi.** implements com.tencent.mm.sdk.openapi.WXMediaMessage$IMediaObject {*; }
+-keep class com.tencent.mm.sdk.openapi.**{*;}
+-keep class net.monkey8.witness.util.thirdpartyaccount.bean.**{*;}
+#友盟
+-dontwarn com.umeng.**
+
+#微博
+-dontwarn com.sina.weibo.**
+
+-keepclassmembers class * {
+    @org.simple.eventbus.Subscriber <methods>;
+}
+#-keep class org.simple.** { *; }
+-keep interface org.simple.** { *; }
+#-keepclasseswithmembers    org.simple.eventbus.Subscriber{public protected <methods>;  }
+
+#
+#-keep interface org.simple.eventbus.EventBus
+
+
+
+

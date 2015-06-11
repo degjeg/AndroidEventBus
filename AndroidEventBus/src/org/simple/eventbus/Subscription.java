@@ -88,4 +88,9 @@ public class Subscription {
     public java.lang.Object getSubscriber() {
         return (subscriber != null && subscriber.get() != null) ? subscriber.get() : null;
     }
+
+    @Override
+    public String toString() {
+        return "" + targetMethod + "," + threadMode;
+    }
 }

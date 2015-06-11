@@ -53,10 +53,16 @@ public final class EventType {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < paramClass.length; i++) {
-            sb.append(paramClass[i].getName());
-            sb.append(",");
+        if (paramClass != null) {
+            for (int i = 0; i < paramClass.length; i++) {
+                if (paramClass[i] != null) {
+                    sb.append(paramClass[i].getName());
+                }
+
+                sb.append(",");
+            }
         }
+
         return "EventType tag=" + tag + ",pa:" + sb;
     }
 

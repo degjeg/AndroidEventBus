@@ -85,11 +85,12 @@ public class SubscriberMethodHunter {
                     Method method = allMethods[i];
                     // 根据注解来解析函数
                     Subscriber annotation = method.getAnnotation(Subscriber.class);
+
                     if (annotation != null) {
                         // 获取方法参数
                         Class<?>[] paramsTypeClass = method.getParameterTypes();
                         // just only one param
-                        int len = paramsTypeClass==null?0:paramsTypeClass.length;
+                        int len = paramsTypeClass == null ? 0 : paramsTypeClass.length;
                         for (int midx = 0; midx < len; midx++) {
                             paramsTypeClass[midx] = convertType(paramsTypeClass[midx]);
                         }
@@ -98,6 +99,10 @@ public class SubscriberMethodHunter {
                         TargetMethod subscribeMethod = new TargetMethod(method, eventType, annotation.mode());
                         subscriberMethods.add(subscribeMethod);
 
+                    } else {
+                        if (EventBus.LOG_ON) {
+                            Log.d(EventBus.TAG, "annotation is null:" + method);
+                        }
                     }
                 } // end for
 
@@ -112,6 +117,18 @@ public class SubscriberMethodHunter {
             subscribe(subscribeMethod.eventType, subscribeMethod, subscriber);
         }
 
+        if (EventBus.LOG_ON) {
+            StringBuilder sb = new StringBuilder();
+            for (EventType eventType : mSubscriberMap.keySet()) {
+                sb.append("event:(");
+                sb.append(mSubscriberMap.get(eventType).size());
+                sb.append("event:)->");
+                sb.append(eventType);
+
+                sb.append("\n");
+            }
+            Log.d(EventBus.TAG, "after findSubscribeMethods:\n" + subscriber + "\n" + sb);
+        }
     }
 
     /**

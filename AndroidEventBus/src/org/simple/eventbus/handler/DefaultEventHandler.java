@@ -18,6 +18,7 @@ package org.simple.eventbus.handler;
 
 import android.util.Log;
 
+import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscription;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,6 +42,10 @@ public class DefaultEventHandler implements EventHandler {
         }
         try {
             Object event[] = (Object[]) event1;
+
+            if (EventBus.LOG_ON) {
+                Log.d(EventBus.TAG, "handleEvent:" + subscription + ",event:" + event1);
+            }
             // 执行
             if (event == null || event.length == 0) {
                 subscription.targetMethod.invoke(subscription.getSubscriber());

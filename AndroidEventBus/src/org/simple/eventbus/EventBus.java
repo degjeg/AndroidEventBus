@@ -16,6 +16,8 @@
 
 package org.simple.eventbus;
 
+import android.util.Log;
+
 import org.simple.eventbus.handler.AsyncEventHandler;
 import org.simple.eventbus.handler.DefaultEventHandler;
 import org.simple.eventbus.handler.EventHandler;
@@ -56,7 +58,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class EventBus {
 
-    public static final boolean LOG_ON = true;
+    public static final boolean LOG_ON = false;
+    public static final String TAG = "EventBus";
     /**
      * default descriptor
      */
@@ -289,6 +292,10 @@ public final class EventBus {
          */
         void dispatchEvents(Object... parameter) {
             Queue<EventType> eventsQueue = mLocalEvents.get();
+
+            if (EventBus.LOG_ON) {
+                Log.d(EventBus.TAG, "dispatchEvents:" + eventsQueue.size());
+            }
             while (eventsQueue.size() > 0) {
                 deliveryEvent(eventsQueue.poll(), parameter);
             }
@@ -314,6 +321,10 @@ public final class EventBus {
                 if (e.contains(type)) {
                     eventTypes.add(e);
                 }
+            }
+
+            if (EventBus.LOG_ON) {
+                Log.d(EventBus.TAG, "deliveryEvent:(" + eventTypes.size() + ")->" + type);
             }
 
             for (EventType eventType : eventTypes) {
